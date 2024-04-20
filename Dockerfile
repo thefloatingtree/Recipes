@@ -16,6 +16,8 @@ ENV NODE_ENV="production"
 ARG PNPM_VERSION=9.0.1
 RUN npm install -g pnpm@$PNPM_VERSION
 
+# Install openssl for prisma
+RUN apt-get update -y && apt-get install -y openssl
 
 # Throw-away build stage to reduce size of final image
 FROM base as build
@@ -44,6 +46,7 @@ FROM base
 # Copy built application
 COPY --from=build /app/build /app/build
 COPY --from=build /app/package.json /app/package.json
+COPY --from=build /app/prisma /app/prisma
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000

@@ -33,12 +33,14 @@ RUN pnpm install --frozen-lockfile --prod=false
 # Copy application code
 COPY --link . .
 
+# Generate prisma client
+RUN pnpm run prisma generate
+
 # Build application
 RUN pnpm run build
 
 # Remove development dependencies
 RUN pnpm prune --prod
-
 
 # Final stage for app image
 FROM base
@@ -47,6 +49,7 @@ FROM base
 COPY --from=build /app/build /app/build
 COPY --from=build /app/package.json /app/package.json
 COPY --from=build /app/prisma /app/prisma
+COPY --from=build /app/node_modules /app/node_modules
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000

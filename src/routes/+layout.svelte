@@ -1,6 +1,6 @@
 <script>
 	import '../app.postcss';
-	import Navigation from '$lib/components/Navigation.svelte';
+	import Navigation from '$lib/components/Navigation/Navigation.svelte';
 	import { signOut, signIn } from '@auth/sveltekit/client';
 
 	export let data;
